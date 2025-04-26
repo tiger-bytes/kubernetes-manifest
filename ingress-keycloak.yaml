@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  namespace: eshop
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+spec:
+  ingressClassName: public
+  tls:
+  - hosts:
+    - staging.keycloak.iprovler.com
+    secretName: keycloak-tls
+  rules:
+  - host: staging.keycloak.iprovler.com
+    http:
+     paths:
+     - path: /
+       pathType: Prefix
+       backend:
+         service:
+           name: keycloak
+           port:
+             number: 80
